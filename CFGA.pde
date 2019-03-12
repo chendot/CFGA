@@ -4,7 +4,7 @@
 Population pop;
 
 void setup() {
-  size(600, 300);
+  size(800, 300);
   smooth();
 
   // 创建一个突变率为1%，种群数量为5的种群
