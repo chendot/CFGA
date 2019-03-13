@@ -15,7 +15,7 @@ class Population {
     generations = 0;
     for (int i = 0; i < cfbb.length; i++) {
       // 初始化种群中物种，设置物种生成位置
-      cfbb[i] = new CFBB(new DNA(), 50+i*width/num, 80);
+      cfbb[i] = new CFBB(new DNA(8), 50+i*width/num, 80);
     }
   }
 
@@ -26,11 +26,11 @@ class Population {
   }
 
   // Are we rolling over any of the faces?
-  void rollover(int mx, int my) {
-    for (int i = 0; i < cfbb.length; i++) {
-      cfbb[i].rollover(mx, my);
-    }
-  }
+  //void rollover(int mx, int my) {
+  //  for (int i = 0; i < cfbb.length; i++) {
+  //    cfbb[i].rollover(mx, my);
+  //  }
+  //}
 
   // Generate a mating pool
   void selection() {
@@ -71,7 +71,7 @@ class Population {
       // Mutate their genes
       child.mutate(mutationRate);
       // Fill the new population with the new child
-      cfbb[i] = new CFBB(child, 50+i*75, 60);
+      cfbb[i] = new CFBB(child, 50+i*w, 85);
     }
     generations++;
   }

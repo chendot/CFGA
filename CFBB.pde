@@ -7,8 +7,6 @@ class CFBB {
   float fitness;    // How good is this face?
   float x, y;       // Position on screen
   int wh = 70;      // Size of square enclosing face
-  //boolean rolloverOn; // Are we rolling over this face?
-  Box box;
 
   // 基因对应表现型
 
@@ -16,6 +14,7 @@ class CFBB {
   float slen;    // 初始生长长度
   float tlen;   // 每轮生长长度系数
   int depth;    // 递归深度
+  float p;  // 每一级角度变化率
   // 粗细
   float quality = 1;
 
@@ -27,11 +26,12 @@ class CFBB {
     x = x_; 
     y = y_;
     fitness = 1;
-    slen = map(dna.genes[0], 0, 1, 1, 40);  // 起始枝条长度
+    slen = map(dna.genes[0], 0, 1, 10, 30);  // 起始枝条长度
+    //slen = 20;
     theta = map(dna.genes[1], 0, 1, 0, PI/2);
     depth = int(map(dna.genes[2], 0, 1, 3, 10));
-    
     tlen = dna.genes[3];
+    //p = dna.genes[4];
     
     //box = new box()
   }
@@ -46,7 +46,8 @@ class CFBB {
 
   // 
   void grow(float len_, int depth_) {
-    //theta = random(PI/3);
+    //theta = map(dna.genes[1], 0, 1, 0, PI/2);
+    //theta *= map(p, 0, 1, 0, 2);
     strokeWeight(1);
     line(0, 0, 0, -len_);
     translate(0, -len_);
@@ -81,13 +82,7 @@ class CFBB {
     return dna;
   }
 
-  // Increment fitness if mouse is rolling over face
-  void rollover(int mx, int my) {
-    //if (r.contains(mx, my)) {
-    //  rolloverOn = true;
-    //  fitness += 0.25;
-    //} else {
-    //  rolloverOn = false;
-    //}
+  void addFitness(float s) {
+    fitness += s;
   }
 }

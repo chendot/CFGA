@@ -1,16 +1,12 @@
-// Interactive Selection
-// http://www.genarts.com/karl/papers/siggraph91.html
-// Daniel Shiffman <http://www.shiffman.net>
 // 模拟单体DNA数据类
 
 class DNA {
 
   // The genetic sequence
   float[] genes;
-  int len = 8;  // Arbitrary length
   
   //Constructor (makes a random DNA)
-  DNA() {
+  DNA(int len) {
     // DNA is random floating point values between 0 and 1 (!!)
     genes = new float[len];
     for (int i = 0; i < genes.length; i++) {
