@@ -1,4 +1,5 @@
 // 单体物种‘CFBB’，包含DNA序列，适应度因子fitness，变现形态
+// 维度定义
 
 class CFBB {
 
@@ -7,20 +8,18 @@ class CFBB {
   float x, y;       // Position on screen
   int wh = 70;      // Size of square enclosing face
   //boolean rolloverOn; // Are we rolling over this face?
+  Box box;
 
   // 基因对应表现型
-  // 生长角度
-  float theta;
-  // 生长长度
-  float len;
-  // 递归深度
-  int depth;
+
+  float theta;  // 生长角度
+  float slen;    // 初始生长长度
+  float tlen;   // 每轮生长长度系数
+  int depth;    // 递归深度
   // 粗细
   float quality = 1;
 
   CFBB() {
-    //len = 60;
-    //depth = 5;
   }
 
   CFBB(DNA dna_, float x_, float y_) {
@@ -28,16 +27,20 @@ class CFBB {
     x = x_; 
     y = y_;
     fitness = 1;
-    len = map(dna.genes[0], 0, 1, 1, 40);  // 起始枝条长度
+    slen = map(dna.genes[0], 0, 1, 1, 40);  // 起始枝条长度
     theta = map(dna.genes[1], 0, 1, 0, PI/2);
     depth = int(map(dna.genes[2], 0, 1, 3, 10));
+    
+    tlen = dna.genes[3];
+    
+    //box = new box()
   }
 
   // 生物体外在表现
   void display() {
     pushMatrix();
     translate(x, y);
-    this.grow(len, depth);
+    this.grow(slen, depth);
     popMatrix();
   }
 
@@ -48,7 +51,7 @@ class CFBB {
     line(0, 0, 0, -len_);
     translate(0, -len_);
     depth_--;
-    len_ *= 0.8;
+    len_ *= tlen;
 
     if (depth_ > 0) {
       pushMatrix();    
