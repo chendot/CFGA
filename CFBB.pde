@@ -1,5 +1,4 @@
-// 单体物种‘CFBB’，包含DNA序列，适应度因子fitness，变现形态
-// 维度定义
+// Organism name CFBB, with properties as DNA, fitness
 
 class CFBB {
 
@@ -7,7 +6,8 @@ class CFBB {
   float fitness;    // How good is this face?
   float x, y;       // Position on screen
   int wh = 70;      // Size of square enclosing face
-
+  float yoff = 0;
+  
   // 基因对应表现型
 
   float theta;  // 生长角度
@@ -28,24 +28,22 @@ class CFBB {
     fitness = 1;
     slen = map(dna.genes[0], 0, 1, 10, 30);  // 起始枝条长度
     //slen = 20;
-    theta = map(dna.genes[1], 0, 1, 0, PI/2);
+    //theta = map(dna.genes[1], 0, 1, 0, PI/2);
+    //theta = dna.genes[1];
     depth = int(map(dna.genes[2], 0, 1, 3, 10));
     tlen = dna.genes[3];
-    //p = dna.genes[4];
-    
-    //box = new box()
   }
 
   // 生物体外在表现
   void display() {
+    yoff += 0.005;
     pushMatrix();
     translate(x, y);
-    this.grow(slen, depth);
+    this.grow(slen, depth, 0);
     popMatrix();
   }
 
-  // 
-  void grow(float len_, int depth_) {
+  void grow(float len_, int depth_, float xoff) {
     //theta = map(dna.genes[1], 0, 1, 0, PI/2);
     //theta *= map(p, 0, 1, 0, 2);
     strokeWeight(1);
@@ -53,21 +51,23 @@ class CFBB {
     translate(0, -len_);
     depth_--;
     len_ *= tlen;
-
+    
+    xoff += 0.1;
+    
     if (depth_ > 0) {
+      theta = map(noise(xoff, yoff), 0, 1, -PI/2, PI/2);
       pushMatrix();    
       rotate(theta);   
-      grow(len_, depth_);       
+      grow(len_, depth_, xoff);       
       popMatrix();    
 
       pushMatrix();
       rotate(-theta);
-      grow(len_, depth_);
+      grow(len_, depth_, xoff);
       popMatrix();
     }
   }
 
-  // 繁殖
   CFBB crossover(CFBB partner) {
     CFBB child = new CFBB();
     child.dna = this.dna.crossover(partner.dna);

@@ -1,11 +1,10 @@
-// 模拟单体DNA数据类
+// Simulate DNA data
 
 class DNA {
 
   // The genetic sequence
   float[] genes;
   
-  //Constructor (makes a random DNA)
   DNA(int len) {
     // DNA is random floating point values between 0 and 1 (!!)
     genes = new float[len];
@@ -18,8 +17,6 @@ class DNA {
     genes = newgenes;
   }
   
-  // Crossover
-  // Creates new DNA sequence from two (this & 
   DNA crossover(DNA partner) {
     float[] child = new float[genes.length];
     int crossover = int(random(genes.length));

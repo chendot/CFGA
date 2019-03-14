@@ -1,82 +1,58 @@
-// 主要过程：
-// 1.创建种群  2.选择  3.繁殖
+// Genetic algorithm test
+// 1.Create population  
+// 2.Eliminate through selection or competition  
+// 3.Reproduce according to selected genes pool
 import controlP5.*;
 
 Population pop;
 
 ControlP5 cp5;
 
-int num = 5;  // 种群中个体数量
-float w;
+int num = 10;      // Number of CFBB in the population
+float w;           // Size 
+float yPos = 150;  //
 
 void setup() {
   size(800, 300);
   smooth();
-
-  // 创建一个突变率为1%，种群数量为num的种群
-  pop = new Population(0.01, num);
   w = width/num;
+
+  // Create a population with 1% rate of mutation
+  pop = new Population(0.01, num);
+
   cp5 = new ControlP5(this);
-  cp5.addButton("bA")
-    .setValue(0.25)
-    .setPosition(35, 85)
-    .setSize(30, 10);
-  cp5.addButton("bB")
-    .setValue(0.25)
-    .setPosition(35+w, 85)
-    .setSize(30, 10);
-  cp5.addButton("bC")
-    .setValue(0.25)
-    .setPosition(35+2*w, 85)
-    .setSize(30, 10);
-  cp5.addButton("bD")
-    .setValue(0.25)
-    .setPosition(35+3*w, 85)
-    .setSize(30, 10);
-  cp5.addButton("bE")
-    .setValue(0.25)
-    .setPosition(35+4*w, 85)
-    .setSize(30, 10);
+  for (int i = 0; i < num; i++) {
+    cp5.addButton("B"+i)
+      .setId(i)
+      //.setValue(0.25)
+      .setPosition(35+i*w, yPos)
+      .setSize(30, 10);
+  }
+
   cp5.addButton("love")
-    .setValue(0)
-    .setPosition(1, 85)
-    .setSize(30, 10);
+    //.setValue(0)
+    .setPosition(1, height-50)
+    .setSize(50, 20);
 }
 
 void draw() {
   background(255);  
   //stroke(0);
-  // 展示最新一代
   pop.display();
   //noLoop();
   fill(0);
   for (int i = 0; i < num; i++) {
-    text(pop.cfbb[i].getFitness(), 30+i*w, 120);
+    text(pop.cfbb[i].getFitness(), 30+i*w, yPos+20);
   }
 }
 
 void controlEvent(ControlEvent theEvent) {
+  int id = theEvent.getController().getId();
+  pop.cfbb[id].addFitness(0.25);  // select
 }
 
-// 选择
-void bA(float theValue) {
-  pop.cfbb[0].addFitness(theValue);
-}
-void bB(float theValue) {
-  pop.cfbb[1].addFitness(theValue);
-}
-void bC(float theValue) {
-  pop.cfbb[2].addFitness(theValue);
-}
-void bD(float theValue) {
-  pop.cfbb[3].addFitness(theValue);
-}
-void bE(float theValue) {
-  pop.cfbb[4].addFitness(theValue);
-}
-
-// 繁殖
-void love(float theValue) {
+// reproduce
+void love() {
   pop.selection();
   pop.reproduction();
 }
